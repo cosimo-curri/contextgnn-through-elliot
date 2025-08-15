@@ -2,8 +2,8 @@ experiment:
   backend: pytorch
   data_config:
     strategy: fixed
-    train_path: ../data/{0}/train_elliot.tsv
-    test_path: ../data/{0}/test_elliot.tsv
+    train_path: ../data/{0}_sub10/train_elliot.tsv
+    test_path:  ../data/{0}_sub10/test_elliot.tsv
   dataset: amazon-book
   top_k: 20
   evaluation:
@@ -16,18 +16,22 @@ experiment:
       meta:
         hyper_opt_alg: grid
         verbose: True
-        save_weights: False
-        validation_rate: 20
-        validation_metric: Recall@20
+        save_weights: True
+        validation_rate: 1
+        validation_metric: nDCG@20
         restore: False
         write_best_iterations: True
+      
+      # TRAINING
+      epochs: 3
+      max_steps: 600
       lr: 0.001
-      epochs: 20
-      factors: 128
-      batch_size: 128
-      n_layers: 4
-      aggr: sum
-      channels: 128
-      max_steps: 2000
-      neigh: (16,16,8,8)
+      batch_size: 256 # Increase if GPU allows it
       seed: 42
+      
+      # ARCHITECTURE
+      n_layers: 3
+      aggr: sum
+      factors: 128
+      channels: 128
+      neigh: (32,16,8)
